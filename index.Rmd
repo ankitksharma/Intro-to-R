@@ -1,0 +1,770 @@
+---
+title       : Intro to R
+subtitle    : Getting familiar with R statistical environment
+author      : Ankit Sharma
+date        : 7-26-2013
+framework   : revealjs        # {io2012, html5slides, shower, dzslides, ...}
+highlighter : highlight.js  # {highlight.js, prettify, highlight}
+hitheme     : zenburn      # {tomorrow}
+widgets     : []            # {mathjax, quiz, bootstrap}
+mode        : selfcontained # {standalone, draft}
+revealjs:
+  theme: solarized # {beige}
+  transition: cube
+  center: "true"
+bootstrap:
+  theme: amelia
+
+---
+# Intro to R
+### A brief introduction to R statistical environment
+
+<small> Created by [Ankit Sharma](http://in.linkedin.com/in/aks11588/) / [Digg Data](http://diggdata.in) </small>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+*** =pnotes
+
+Some notes on the first slide
+
+--- &vertical
+### Basic operations
+Addition, Subtraction, Multiplication, Division, Remainder
+
+```{r eval=TRUE}
+1 + 3
+4 * 2 -5
+42/23 + 43
+```
+
+***
+
+Creating a vector
+
+```{r}
+c(3,2,5,1,3,5,8,9,6,3,2)
+3:45
+```
+
+***
+
+Arithmatic operations on vectors
+
+```{r}
+c(1,2,3,4) * c(10,20,30,40)
+```
+
+if two vectors are not of equal lengths 
+
+```{r}
+c(1,2,3,4,5) * c(10,20,30,40)
+```
+
+***
+
+You can create a character vector as well
+
+<small>_Note: You can using assignment operator '<-' to assign this vector to a variable name "mydata"_</small>
+
+```{r}
+mydata <- c("Hello world", "Data Science Practices", "Bangalore") 
+print(mydata)
+mydata
+```
+
+---
+## Navigation within R environment
+
+ - Listing all files
+ 
+```{r eval=FALSE}
+ls()
+```
+
+ - Examining a variable
+ 
+```{r eval=FALSE}
+str() # Compactly display the internal structure of an R object
+summary() # Displays summary of the data like mean, median, 1st and 3rd quantile, number of NA(missing values)
+head() # Displays first 6 rows of the data
+tail() # Displays last 6 rows of the data
+class()  # Displays class of object - character, integer, numeric, factor, logical
+describe() # part of HMisc package, basically a mixture of str() and summary()
+```
+
+ - Removing variables from environment
+ 
+```{r eval=FALSE}
+rm()
+rm(list=ls()) # Removes everything
+```
+
+--- &vertical
+## Data Structures in R
+
+1. Vectors:
+  - Numeric
+  - Character
+  - Logical
+  - Factors
+
+2. Objects:
+  - Arrays & Matrices
+  - Lists
+  - Data Frames
+
+> **Data type conversion**
+
+***
+
+## Vectors
+
+```{r}
+x <- c(0, 2:4)
+class(x)
+y <- c("alpha", "beta", "gamma", "32", "r2")
+class(y)
+z <- as.logical(c(1,0,TRUE,F,1,T,FALSE))
+class(z)
+f <- as.ordered(factor(c("Good", "Normal", "Bad", "Good", "Bad", "Good", "Normal"), levels=c("Bad", "Normal", "Good")))
+class(f)
+str(f)
+```
+
+***
+
+ - Arrays
+
+```{r}
+myarray <- array(c(1,2,3,4,5,6,7,8,9,10,11,12),dim=c(3,4))
+print(myarray)
+```
+
+referencing a call
+
+```{r}
+myarray[2,3]
+```
+
+<small> To get all rows (or columns) from a dimension, simply omit the indices. The following code is for showing all columns of 2nd row </small>
+
+```{r}
+myarray[2,]
+```
+
+***
+
+ - Matrices
+
+<small> Well, matrix is nothing but a 2-dimensional array </small>
+
+```{r}
+matrix(data=c(1,2,3,4,5,6,7,8,9,10,11,12),nrow=3,ncol=4)
+data <- c(1,2,3,4,5,6,7,8,9,10,11,12)
+matrix(data, ncol=3, byrow=F) # Filling Column-wise
+matrix(data, ncol=3, byrow=T) # Filling Row-wise
+```
+
+***
+
+ - Lists
+
+<small>In R, it is possible to construct more complicated structures with multiple data types. R has a built-in data type for mixing objects of different types, called **lists**. </small>
+
+```{r}
+ndata = c(2, 3, 5) 
+sdata = c("aa", "bb", "cc", "dd", "ee") 
+ldata = c(TRUE, FALSE, TRUE, FALSE, FALSE) 
+mydata = list(ndata, sdata, ldata, 3)   # x contains copies of n, s, b
+```
+
+Referencing list
+
+```{r}
+mydata[2]
+mydata[c(1,3)]
+mydata[[1]][3] # Member referencing
+```
+
+
+***
+
+ - Data Frames
+
+<small> A data frame is used for storing data tables. It is a list of vectors of equal length. For example, the following variable df is a data frame containing three vectors a, b, c.</small> 
+
+```{r}
+a <- c(2, 3, 5) 
+b <- c("aa", "bb", "cc") 
+c <- c(TRUE, FALSE, TRUE) 
+df <- data.frame(a, b, c) 
+df
+```
+
+<small>Built-in data frame like **iris**, **mcars**, **Insurance**, etc.</small>
+
+```{r}
+class(iris)
+str(iris)
+```
+
+***
+
+## Data type conversion
+Use is.foo to test for data type foo. Returns TRUE/FALSE<br/>
+Use as.foo to explicitly convert it.
+ 
+ - is.numeric(), is.character(), is.vector(), is.matrix(), is.data.frame()
+ - as.numeric(), as.character(), as.vector(), as.matrix(), as.data.frame)
+
+<img src="images/DataConversion.png">
+
+---&vertical
+
+## Working with Data Frames
+
+ - Manipulation
+ - Indexing
+ - Transform data
+
+***
+## Manipulation
+Delecting a column
+```{r}
+data(iris)
+dim(iris)
+iris$Sepal.Width <- NULL # or try iris[,2] <- NULL
+dim(iris)
+```
+Delecting a row
+```{r}
+data(iris)
+dim(iris)
+iris <- iris[-c(5:10),] # Removing the 5th-10th rows, total 6 rows
+dim(iris)
+```
+
+
+***
+
+## Indexing
+ 1. array of integer indices
+ 2. array of character names
+ 3. array of logical booleans
+ 
+```{r}
+mydata <- list(bangalore=c(2,3,1,4,2), indore=c(7,2,4,9,8), noida=c(5,2,6,8,6))
+mydata <- as.data.frame(mydata)
+mydata[2:4,1:2] # integer indices
+mydata[,"indore"] # character indices
+mydata[mydata$bangalore > 2,] # boolean logic
+```
+
+***
+
+## Transform data
+Subset
+```{r}
+newdata <- subset(iris, Species=="setosa")
+summary(newdata)
+```
+
+***
+## Transform data (cond...)
+Transform
+```{r}
+newdata <- transform(iris, ratio=Petal.Width/Petal.Length, Sepal.Length=NULL)
+summary(newdata)
+```
+
+***
+
+## Transform data (cond...)
+Sample
+```{r}
+mysample <- iris[sample(1:nrow(iris), 50, replace=FALSE),]
+summary(mysample)
+```
+
+---&vertical
+## Control structures & Functions
+R has the following control structures:
+
+ 1. if-else
+ 2. for
+ 3. while
+ 4. switch
+ 5. ifelse
+
+***
+
+**Functions**
+
+R has lot of [Build-in functions](http://www.statmethods.net/management/functions.html) like mean(), tolower(), dnorm(), na.rm(), is.na(), t() for various analysis.<br/>
+The general structure for any user-defined function in R is:
+
+```{r eval=FALSE}
+myfunction <- function(arg1, arg2, ... ){
+statements
+return(object)
+}
+```
+
+***
+
+## Example
+Transpose of a matrix
+
+```{r}
+mytrans <- function(x) { 
+  if (!is.matrix(x)) {
+    warning("argument is not a matrix: returning NA")
+    return(NA_real_)
+  }
+  y <- matrix(1, nrow=ncol(x), ncol=nrow(x)) 
+  for (i in 1:nrow(x)) {
+    for (j in 1:ncol(x)) {
+      y[j,i] <- x[i,j] 
+    }
+  }
+return(y)
+}
+
+# try it
+z <- matrix(1:10, nrow=5, ncol=2)
+tz <- mytrans(z)
+tz
+```
+
+---&vertical
+
+## Working with data files
+
+ - Getting data into R
+ - Getting data out of R
+
+***
+
+## Getting data into R
+
+ <small>- From data files (csv, tsv, txt, ...) 
+ _Also look at read.delim, read.table functions_
+ </small>
+```{r eval=FALSE}
+mydata <- read.csv('/file path/file_name.csv', header=TRUE)
+```
+
+ <small>- From databases
+packages require **sqldf**, **RSQLite**, **RSQLite.extfuns**, **gsubfn**, **DBI**, **chron**</small>
+```{r eval=FALSE}
+connection <- dbConnect(driver, user, pass, host, dbname)
+mydata <- dbSendQuery(connection, "SELECT * FROM table_name")
+```
+
+ <small>- From Web </small>
+```{r eval=FALSE}
+connection <- url("http://www.example.com/datafile/data.txt")
+mydata <- read.csv(connection, header=TRUE)
+```
+
+ <small>- From RData files</small>
+```{r eval=FALSE}
+mydata <- data("Data_File_Name.Rdata")
+```
+
+***
+
+## Getting data out of R
+
+ <small>- To data files (csv, tsv, txt, ...)</small>
+```{r eval=FALSE}
+write.csv('/file path/file_name.csv', header=TRUE, row.names=NULL)
+```
+
+ <small>- To databases </small>
+```{r eval=FALSE}
+connection <- dbConnect(driver, user, pass, host, dbname)
+dbWriteTable(connection, "table_name", data_name)
+```
+
+ <small>- To RData file
+ </small>
+
+```{r eval=FALSE}
+save(mydata, file = "mydata.RData")
+```
+
+---&vertical
+## Data Processing
+
+ 1. Loading data into R
+ 2. Analyzing data
+ 3. Writing it out on a csv and RData file
+
+
+***
+
+## Loading data into R
+```{r}
+data(iris)
+dim(iris)
+head(iris) #You can also do tails(iris) to get last 6 rows
+summary(iris)
+```
+
+***
+
+## Analyzing data
+```{r}
+dim(iris)
+head(iris) #You can also do tails(iris) to get last 6 rows
+summary(iris) #You can also try str(iris) to show the compatibility display of objects
+```
+
+***
+
+## Writing it out a csv & RData
+```{r, eval=FALSE}
+write.csv('myIrisData', row.names=NULL)
+save('iris', file="myIrisRdata.RData")
+```
+
+Plotting some data
+
+```{r}
+plot(iris$Sepal.Length, xlab="Index", ylab="Length")
+```
+
+---&vertical
+## Apply functions
+
+<small>The following are the apply functions in the base package in R which should be used instead of loops.
+
+ 1. ***apply***             Apply Functions Over Array Margins
+ 2. ***by***                Apply a Function to a Data Frame Split by Factors
+ 3. ***eapply***            Apply a Function Over Values in an Environment
+ 4. ***lapply***            Apply a Function over a List or Vector
+  - ***sapply***
+  - ***vapply***
+ 5. ***mapply***            Apply a Function to Multiple List or Vector Arguments
+ 6. ***rapply***            Recursively Apply a Function to a List
+ 7. ***tapply***            Apply a Function Over a Ragged Array
+
+</small>
+
+***
+
+## lapply
+
+```{r}
+# create a list with 2 elements
+l <- list(a = 1:10, b = 11:20)
+head(l)
+# the mean of the values in each element
+lapply(l, mean)
+# the sum of the values in each element
+lapply(l, sum)
+```
+
+***
+
+## Replicate
+
+```{r}
+replicate(5, rnorm(10)) # rnorm() is random generation for the normal distribution with mean equal to mean and standard deviation equal to sd.
+replicate(10, "impetus")
+```
+
+
+---&vertical
+## Graphics and Visualization
+
+There are 3 major ways of creating graphics in R:
+ 1. Base R graphics
+ 2. [ggplot2 package](http://ggplot2.org/)
+ 3. [lattice package](http://lmdvr.r-forge.r-project.org/figures/figures.html)
+ 
+Both "lattice" and "ggplot2" are based on grid graphics sub-system.<br/> A highly useful presentation for [building graphics in ggplot2](http://www.slideshare.net/izahn/rgraphics-12040991).
+
+***
+
+## Basic graphics in R
+
+ - Density plot
+ - Dot plot
+ - Bar plot
+ - Line plot
+ - Pie plot
+ - Box plot
+ - Scatter plot
+
+***
+
+Density plot
+```{r}
+x <- mtcars$mpg 
+h<-hist(x, breaks=10, col="red", xlab="Miles Per Gallon", main="Histogram with Normal Curve") 
+xfit<-seq(min(x),max(x),length=40) 
+yfit<-dnorm(xfit,mean=mean(x),sd=sd(x)) 
+yfit <- yfit*diff(h$mids[1:2])*length(x) 
+lines(xfit, yfit, col="blue", lwd=2)
+```
+
+***
+
+Dot plot
+```{r}
+dotchart(mtcars$mpg,labels=row.names(mtcars),cex=.7,
+     main="Gas Milage for Car Models", 
+   xlab="Miles Per Gallon")
+```
+
+***
+
+Bar plot
+```{r}
+counts <- table(mtcars$gear)
+barplot(counts, main="Car Distribution", xlab="Number of Gears")
+```
+
+***
+
+Line plot
+```{r}
+x <- c(-3:3); y <- x^2 + 2 # create some data
+par(pch=22, col="blue") # plotting symbol and color 
+opts = "c"
+heading = paste("type=",opts) 
+plot(x, y, main=heading) 
+lines(x, y, type=opts) 
+```
+
+***
+
+Pie plot
+```{r}
+slices <- c(10, 12, 4, 16, 8) 
+lbls <- c("US", "UK", "Australia", "Germany", "France")
+pct <- round(slices/sum(slices)*100)
+lbls <- paste(lbls, pct) # add percents to labels 
+lbls <- paste(lbls,"%",sep="") # ad % to labels 
+pie(slices,labels = lbls, col=rainbow(length(lbls)), main="Pie Chart of Countries")
+```
+
+***
+
+Box plot
+```{r}
+boxplot(mpg~cyl,data=mtcars, main="Car Milage Data", xlab="Number of Cylinders", ylab="Miles Per Gallon")
+```
+
+***
+
+Scatter plot
+```{r}
+attach(mtcars)
+plot(wt, mpg, main="Scatterplot Example", xlab="Car Weight ", ylab="Miles Per Gallon ", pch=19)
+```
+
+---
+## "SQLDF" package - an intro
+
+<small> 
+_sqldf_ let's you perform SQL queries on your R data frames.
+Install it using **install.packages("sqldf")**
+</small>
+
+<small> Goto [SQLite](http://www.sqlite.org/lang.html) for more querries. </small>
+
+```{r}
+library(sqldf)
+movies <- data.frame(
+  title=c("The Great Outdoors", "Caddyshack", "Fletch", "Days of Thunder", "Crazy Heart"),
+  year=c(1988, 1980, 1985, 1990, 2009)
+  )
+boxoffice <- data.frame(
+  title=c("The Great Outdoors", "Caddyshack", "Fletch", "Days of Thunder","Top Gun"),
+  revenue=c(43455230, 39846344, 59600000, 157920733, 353816701)
+  )
+ 
+sqldf("SELECT m.*, b.revenue FROM movies m INNER JOIN boxoffice b ON m.title = b.title;")
+
+```
+
+---
+
+## "PLYR" package - an intro
+
+<small> 
+
+_plyr_ let's you perform **split, apply, combine** functionality in base R which reduces the computational time of your analysis by some extent.
+ - Apply family of functions is the preferred way to call a function on each element of a list or vector. 
+ - plyr gives you several functions 
+   - **ddply, daply, dlply, adply, ldply**
+   _ddply splits a data frame and returns a data frame (hence the dd)._
+
+Install it using **install.packages("plyr")** & goto [A brief intro to "Apply" in R](http://nsaunders.wordpress.com/2010/08/20/a-brief-introduction-to-apply-in-r/#more-2058) for more examples. </small>
+
+
+```{r}
+library(plyr)
+str(iris)
+# split a data frame by Species, summarize it, then convert the results into a data frame
+ddply(iris, .(Species), summarise,
+      mean_petal_length=mean(Petal.Length)
+)
+```
+
+---
+
+## "Stringr" package - an intro
+
+<small> 
+_stingr_ allows you to work on string data more effectively
+Install it using **install.packages("stringr")**
+</small>
+
+```{r warning=FALSE, message=FALSE}
+library(stringr)
+names(iris)
+names(iris) <- str_replace_all(names(iris), "[.]", "_")
+names(iris)
+ 
+s <- c("I am in India, I love Cricket, and I like Sachin.")
+str_extract_all(s, "[l][a-z]+")
+str_split(s, ",")
+```
+
+---&vertical
+
+## "ggplot2" package - an intro
+
+<small> 
+Just like **English** language which has grammer, even visualization also has grammer and _ggplot2_ lets you create beautiful visualization using this grammer very easily<br/>
+Install it using **install.packages("ggplot2")**
+</small>
+<img src="http://image.slidesharecdn.com/aninteractiveintroductiontorprogramminglanguageforstatistics-091202191503-phpapp02/95/slide-47-728.jpg?1259814549">
+
+***
+
+## ggplot2 example 1
+
+```{r warning=FALSE, message=FALSE}
+library(ggplot2) 
+# create factors with value labels 
+mtcars$gear <- factor(mtcars$gear,levels=c(3,4,5),labels=c("3gears","4gears","5gears")) 
+mtcars$am <- factor(mtcars$am,levels=c(0,1), labels=c("Automatic","Manual")) 
+mtcars$cyl <- factor(mtcars$cyl,levels=c(4,6,8), labels=c("4cyl","6cyl","8cyl")) 
+# Kernel density plots for mpg grouped by number of gears (indicated by color)
+qplot(mpg, data=mtcars, geom="density", fill=gear, alpha=I(.5), main="Distribution of Gas Milage", xlab="Miles Per Gallon", ylab="Density")
+```
+
+***
+
+## ggplot2 example 2: Plotting the iris data
+
+```{r warning=FALSE, message=FALSE}
+data(iris)
+ggplot(iris, aes(Sepal.Length, Sepal.Width, color = Species)) + geom_point(aes(shape = Species), size = 3)
+```
+
+---
+## "qcc" package - an intro
+
+<small>_qcc_ is a library for statistical quality control. <br/>
+You can install it using **install.packages('qcc')**<br/>
+The classic example is monitoring a machine that produces lug nuts. Let's say the machine is supposed to produce 2.5 inch long lug nuts. We measure a series of lug nuts: 2.48, 2.47, 2.51, 2.52, 2.54, 2.42, 2.52, 2.58, 2.51. Is the machine broken?
+While you might not be monitoring physical machine, but qcc can help you monitor transaction volumes, visitors or logins on your website, database operations, and lots of other processes.</small>
+
+```{r warning=FALSE, message=FALSE}
+library(qcc) 
+# series of value w/ mean of 10 with a little random noise added in
+x <- rep(10, 100) + rnorm(100)
+# a test series w/ a mean of 11
+new.x <- rep(11, 15) + rnorm(15)
+# qcc will flag the new points
+qcc(x, newdata=new.x, type="xbar.one")
+
+```
+
+---&vertical
+
+## "reshape2" package - an intro
+
+<small> _reshape2_ lets you create beautiful visualization using this grammer very easily<br/>
+Install it using **install.packages("reshape2")**
+</small>
+
+```{r warning=FALSE, message=FALSE}
+library(reshape2)
+# generate a unique id for each row; this let's us go back to wide format later
+iris$id <- 1:nrow(iris)
+iris.lng <- melt(iris, id=c("id", "Species"))
+head(iris.lng)
+iris.wide <- dcast(iris.lng, id + Species ~ variable)
+head(iris.wide)
+```
+
+You can use the **melt** function to convert wide data to long data, and **dcast** to go from long to wide.
+
+***
+
+Plotting the results using **ggplot2 package**
+
+```{r warning=FALSE, message=FALSE}
+library(ggplot2)
+# plots a histogram for each numeric column in the dataset
+p <- ggplot(aes(x=value, fill=Species), data=iris.lng)
+p + geom_histogram() + facet_wrap(~variable, scales="free")
+```
+
+---
+
+## "BIGVIS" package - an intro
+
+<small> The _bigvis_ package provides tools for exploratory data analysis of large datasets (10-100 million obs).<br/>
+Install it by typing the following two commands in R terminal: 
+
+ 1. **install.packages("devtools")**
+ 2. **devtools::install_github("bigvis")**
+ 
+</small>
+
+---&vertical
+
+## "random Forest" package - an intro
+
+<small> The very famous _Random Forest_ machine learning algorithm which lets you create a classifier for predicting a class<br/>
+Install it using **install.packages("randomForest")**
+</small>
+
+```{r message=FALSE, warning=FALSE}
+library(randomForest)
+# download Titanic Survivors data
+data <- read.table("http://math.ucdenver.edu/RTutorial/titanic.txt", h=T, sep="\t")
+# make survived into a yes/no
+data$Survived <- as.factor(ifelse(data$Survived==1, "yes", "no"))                 
+# split into a training and test set
+idx <- runif(nrow(data)) <= .75
+data.train <- data[idx,]
+data.test <- data[-idx,]
+# train a random forest
+rf <- randomForest(Survived ~ PClass + Age + Sex, data=data.train, importance=TRUE, na.action=na.omit)
+```
+
+***
+
+Random forest classifier results
+
+```{r}
+# how important is each variable in the model
+imp <- importance(rf)
+o <- order(imp[,3], decreasing=T)
+imp[o,]
+# confusion matrix [[True Neg, False Pos], [False Neg, True Pos]]
+table(data.test$Survived, predict(rf, data.test), dnn=list("actual", "predicted"))
+```
+
+---
+
+## [Thank you!!!]()

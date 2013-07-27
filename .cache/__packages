@@ -1,0 +1,17 @@
+base
+chron
+DBI
+devtools
+ggplot2
+gsubfn
+MASS
+plyr
+proto
+qcc
+randomForest
+reshape2
+RSQLite
+RSQLite.extfuns
+slidify
+sqldf
+stringr

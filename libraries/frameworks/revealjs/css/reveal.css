@@ -1,5 +1,4 @@
 @charset "UTF-8";
-
 /*!
  * reveal.js
  * http://lab.hakim.se/reveal-js
@@ -822,7 +821,7 @@ body {
 
 .reveal.cube .slides section {
 	padding: 30px;
-	min-height: 700px;
+	min-height: 10px;
 
 	-webkit-backface-visibility: hidden;
 	   -moz-backface-visibility: hidden;
